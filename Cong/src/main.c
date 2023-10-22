@@ -16,7 +16,7 @@ int main(void) {
     int screenHeight = 450;
     InitWindow(screenWidth, screenHeight, "Pong");
     SetTargetFPS(60);
-    
+    ClearBackground(BLACK);
     while (!WindowShouldClose()) {
         update();
         draw();
@@ -33,7 +33,6 @@ static void update(void) {
 
 static void draw(void) {
     BeginDrawing();
-    ClearBackground(BLACK);
     if (penDown) DrawCircle(ballX, ballY, radius, WHITE);
     EndDrawing();
 }
