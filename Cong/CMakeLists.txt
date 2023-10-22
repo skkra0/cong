@@ -6,6 +6,6 @@ add_executable(Cong
                
                )
 
-# Set the compiler and linker to include Raylib
 target_include_directories(Cong PRIVATE ${raylib_INCLUDE_DIRS})
 target_link_libraries(Cong PRIVATE ${raylib_LIBRARIES})
+target_link_libraries(Cong PRIVATE m) # math
