@@ -50,9 +50,15 @@ static void initGameData(GameData* data) {
 static void update(GameData* data) {
     updatePad(&data->player1);
     updatePad(&data->player2);
-    if (DetectBallHitY(&data->ball) {
+    if (detectBallHitY(&data->ball) {
         data->ball.velocity.x *= -1;
     }
+
+    if (detectBallHitPad(&data->ball, &data->player1) || detectBallHitPad(&data->ball, &data->player1)) {
+        data->ball.velocity.x *= -1.2;
+        data->ball.velocity.y *= -0.8;
+    }
+    
     updateBall(&data->ball);
 }
 
@@ -64,5 +70,7 @@ static void draw(GameData* data) {
     DrawLineEx(from, to, 3, WHITE);
     drawPad(&data->player1);
     drawPad(&data->player2);
+    // drawScore
+    // drawScore
     EndDrawing();
 }
