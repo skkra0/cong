@@ -1,4 +1,3 @@
-// include raylib.h with header guards
 #ifndef PAD_H
 #define PAD_H
 #include <raylib.h>
