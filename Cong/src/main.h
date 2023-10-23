@@ -7,7 +7,7 @@
 typedef struct GameData {
     Pad player1;
     Pad player2;
-    //Ball ball;
+    Ball ball;
     int score1;
     int score2;
 } GameData;
