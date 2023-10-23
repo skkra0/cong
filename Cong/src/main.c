@@ -4,9 +4,6 @@
 static void update(GameData* data);
 static void draw(GameData* data);
 static void initGameData(GameData* data);
-const int radius = 5;
-int ballX = 400;
-int ballY = radius;
 
 int main(void) {
     printf("Hello, world!\n");
@@ -41,6 +38,11 @@ static void initGameData(GameData* data) {
         .upBtn = KEY_UP,
         .downBtn = KEY_DOWN
     };
+    data->ball = (Ball) {
+        .position = (Vector2) {.x = GetScreenWidth() / 2.f, .y = GetScreenHeight() / 2.f}, // ?
+        .radius = 5,
+        .velocity = (Vector2) {.x = -2, .y = 0}
+    };
     data->score1 = 0;
     data->score2 = 0;
 }
@@ -48,6 +50,10 @@ static void initGameData(GameData* data) {
 static void update(GameData* data) {
     updatePad(&data->player1);
     updatePad(&data->player2);
+    if (DetectBallHitY(&data->ball) {
+        data->ball.velocity.x *= -1;
+    }
+    updateBall(&data->ball);
 }
 
 static void draw(GameData* data) {
