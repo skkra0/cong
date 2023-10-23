@@ -8,4 +8,6 @@ typedef struct Ball {
     Vector2 velocity;
 } Ball;
 
+void updateBall(Ball* ball);
+void drawBall(Ball* ball);
 #endif
