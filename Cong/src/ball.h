@@ -4,7 +4,7 @@
 
 typedef struct Ball {
     Vector2 position;
-    float radius;
+    Vector2 size;
     Vector2 velocity;
 } Ball;
 
