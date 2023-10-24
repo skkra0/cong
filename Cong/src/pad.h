@@ -10,7 +10,7 @@ typedef struct Pad {
     Rectangle rec;
 } Pad;
 
-void updatePad(Pad* pad);
-void drawPad(Pad* pad);
+void UpdatePad(Pad* pad);
+void DrawPad(Pad* pad);
 #endif
 

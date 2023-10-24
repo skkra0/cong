@@ -9,7 +9,7 @@ typedef struct Ball {
     Vector2 velocity;
 } Ball;
 
-void updateBall(Ball* ball);
-void drawBall(Ball* ball);
-bool detectBallHitY(Ball* ball);
+void UpdateBall(Ball* ball);
+void DrawBall(Ball* ball);
+bool DetectBallHitY(Ball* ball);
 #endif

@@ -1,6 +1,6 @@
 #include "pad.h"
 
-void updatePad(Pad* pad) {
+void UpdatePad(Pad* pad) {
     if (IsKeyDown(pad->downBtn) && (pad->rec.y + pad->rec.height) < GetScreenHeight()) {
         pad->rec.y += GetFrameTime() * pad->speed;
     }
@@ -9,6 +9,6 @@ void updatePad(Pad* pad) {
     }
 }
 
-void drawPad(Pad* pad) {
+void DrawPad(Pad* pad) {
     DrawRectangleRec(pad->rec, RAYWHITE);
 }

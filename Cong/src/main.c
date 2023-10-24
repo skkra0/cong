@@ -1,9 +1,17 @@
 #include "main.h"
 
-static void update(GameData* data);
-static void draw(GameData* data);
-static void initGameData(GameData* data);
-static bool detectBallHitPad(Ball* ball, Pad* pad);
+static void Update(GameData* data);
+static void Draw(GameData* data);
+static void InitGameData(GameData* data);
+static bool DetectBallHitPad(Ball* ball, Pad* pad);
+static bool DetectBallMissed(Ball* ball, bool rightSide);
+
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 450;
+const Vector2 SCREEN_CENTER = (Vector2) {
+    .x = SCREEN_WIDTH / 2.f,
+    .y = SCREEN_HEIGHT / 2.f
+};
 
 int main(void) {    
     int screenWidth = 800;
@@ -12,15 +20,15 @@ int main(void) {
     SetTargetFPS(60);
 
     GameData data;
-    initGameData(&data);
+    InitGameData(&data);
 
     while (!WindowShouldClose()) {
-        update(&data);
-        draw(&data);
+        Update(&data);
+        Draw(&data);
     }
 }
 
-static void initGameData(GameData* data) {
+static void InitGameData(GameData* data) {
     data->player1 = (Player) {
         .pad = (Pad) {
             .rec = (Rectangle) {
@@ -29,7 +37,7 @@ static void initGameData(GameData* data) {
                 .width = 10,
                 .height = 50
             },
-            .speed = 300,
+            .speed = 550,
             .upBtn = KEY_W,
             .downBtn = KEY_S
         },
@@ -43,7 +51,7 @@ static void initGameData(GameData* data) {
                 .width = 10,
                 .height = 50
             },
-            .speed = 300,
+            .speed = 550,
             .upBtn = KEY_UP,
             .downBtn = KEY_DOWN
         },
@@ -51,42 +59,70 @@ static void initGameData(GameData* data) {
     };
     
     data->ball = (Ball) {
-        .position = (Vector2) {.x = 400, .y = 225}, // ?
+        .position = SCREEN_CENTER,
         .radius = 5,
         .velocity = (Vector2) {.x = -100, .y = 80}
     };
 }
 
-static void update(GameData* data) {
-    updatePad(&data->player1.pad);
-    updatePad(&data->player2.pad);
-    if (detectBallHitY(&data->ball)) {
+static void Update(GameData* data) {
+    UpdatePad(&data->player1.pad);
+    UpdatePad(&data->player2.pad);
+    if (DetectBallHitY(&data->ball)) {
         data->ball.velocity.y *= -1;
     }
 
-    if (detectBallHitPad(&data->ball, &data->player1.pad) || detectBallHitPad(&data->ball, &data->player2.pad)) {
-        data->ball.velocity.x *= -1.2;
-        data->ball.velocity.y *= 0.8;
+    if (DetectBallHitPad(&data->ball, &data->player1.pad) || DetectBallHitPad(&data->ball, &data->player2.pad)) {
+        data->ball.velocity.x *= -1.4;
+        data->ball.velocity.y *= 1.2;
     }
     
-    updateBall(&data->ball);
+    UpdateBall(&data->ball);
 }
 
-static void draw(GameData* data) {
+static void Draw(GameData* data) {
     BeginDrawing();
     ClearBackground(BLACK);
     Vector2 from = {.x = (GetScreenWidth() / 2.f), .y = 5};
     Vector2 to = {.x = (GetScreenWidth() / 2.f), .y = (GetScreenHeight() - 5.f)};
     DrawLineEx(from, to, 3, WHITE);
-    drawPad(&data->player1.pad);
-    drawPad(&data->player2.pad);
-    // drawScore
-    // drawScore
-    
-    drawBall(&data->ball);
+    DrawPad(&data->player1.pad);
+    DrawPad(&data->player2.pad);
+
+    if (DetectBallMissed(&data->ball, false)) {
+        data->player2.score++;
+        for (int time = GetTime(); GetTime() < time + 1; ) {
+        
+        }
+
+        data->ball.position = SCREEN_CENTER;
+        data->ball.velocity = (Vector2) {.x = -100, .y = 80};
+    }
+
+    if (DetectBallMissed(&data->ball, true)) {
+        data->player1.score++;
+        for (int time = GetTime(); GetTime() < time + 1; ) {
+        
+        }
+
+        data->ball.position = SCREEN_CENTER;
+        data->ball.velocity = (Vector2) {.x = 100, .y = 80};
+    }
+    //DrawScore
+    //DrawScore
+
+    DrawBall(&data->ball);
     EndDrawing();
 }
 
-bool detectBallHitPad(Ball* ball, Pad* pad) {
+static bool DetectBallHitPad(Ball* ball, Pad* pad) {
     return CheckCollisionCircleRec(ball->position, ball->radius, pad->rec);
+}
+
+bool DetectBallMissed(Ball* ball, bool rightSide) {
+    if (rightSide) {
+        return ball->position.x > GetScreenWidth() + 2 * ball->radius;
+    } else {
+        return ball->position.x < -2 * ball->radius;
+    }
 }
