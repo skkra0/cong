@@ -4,12 +4,15 @@
 #include <raylib.h>
 #include "pad.h"
 
+typedef struct Player {
+    Pad pad;
+    int score;
+} Player;
+
 typedef struct GameData {
-    Pad player1;
-    Pad player2;
+    Player player1;
+    Player player2;
     Ball ball;
-    int score1;
-    int score2;
 } GameData;
 
 #endif
