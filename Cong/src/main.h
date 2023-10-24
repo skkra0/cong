@@ -3,6 +3,7 @@
 
 #include <raylib.h>
 #include "pad.h"
+#include "ball.h"
 
 typedef struct Player {
     Pad pad;

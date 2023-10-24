@@ -11,6 +11,5 @@ typedef struct Ball {
 
 void updateBall(Ball* ball);
 void drawBall(Ball* ball);
-void detectBallHitY(Ball* ball);
-void detectBallHitPad(Ball* ball, Pad* pad);
+bool detectBallHitY(Ball* ball);
 #endif

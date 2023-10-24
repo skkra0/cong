@@ -7,8 +7,7 @@ typedef struct Pad {
     int upBtn;
     int downBtn;
     float speed;
-    Vector2 position;
-    Vector2 size;
+    Rectangle rec;
 } Pad;
 
 void updatePad(Pad* pad);

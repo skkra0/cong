@@ -1,14 +1,11 @@
 #include "main.h"
-#include <stdio.h>
 
 static void update(GameData* data);
 static void draw(GameData* data);
 static void initGameData(GameData* data);
+static bool detectBallHitPad(Ball* ball, Pad* pad);
 
-int main(void) {
-    printf("Hello, world!\n");
-    
-
+int main(void) {    
     int screenWidth = 800;
     int screenHeight = 450;
     InitWindow(screenWidth, screenHeight, "Pong");
@@ -26,41 +23,50 @@ int main(void) {
 static void initGameData(GameData* data) {
     data->player1 = (Player) {
         .pad = (Pad) {
-        .position = (Vector2) {.x = 100, .y = 225},
-        .size = (Vector2) {.x = 10, .y = 50},
-        .speed = 5,
-        .upBtn = KEY_W,
-        .downBtn = KEY_S
+            .rec = (Rectangle) {
+                .x = 100,
+                .y = 225,
+                .width = 10,
+                .height = 50
+            },
+            .speed = 300,
+            .upBtn = KEY_W,
+            .downBtn = KEY_S
         },
         .score = 0
     };
     data->player2 = (Player) {
         .pad = (Pad) {
-        .position = (Vector2) {.x = 700, .y = 225},
-        .size = (Vector2) {.x = 10, .y = 50},
-        .speed = 5,
-        .upBtn = KEY_UP,
-        .downBtn = KEY_DOWN
+            .rec = (Rectangle) {
+                .x = 700,
+                .y = 225,
+                .width = 10,
+                .height = 50
+            },
+            .speed = 300,
+            .upBtn = KEY_UP,
+            .downBtn = KEY_DOWN
         },
         .score = 0
     };
+    
     data->ball = (Ball) {
-        .position = (Vector2) {.x = GetScreenWidth() / 2.f, .y = GetScreenHeight() / 2.f}, // ?
+        .position = (Vector2) {.x = 400, .y = 225}, // ?
         .radius = 5,
-        .velocity = (Vector2) {.x = -2, .y = 0}
+        .velocity = (Vector2) {.x = -100, .y = 80}
     };
 }
 
 static void update(GameData* data) {
-    updatePad(&data->player1);
-    updatePad(&data->player2);
-    if (detectBallHitY(&data->ball) {
-        data->ball.velocity.x *= -1;
+    updatePad(&data->player1.pad);
+    updatePad(&data->player2.pad);
+    if (detectBallHitY(&data->ball)) {
+        data->ball.velocity.y *= -1;
     }
 
-    if (detectBallHitPad(&data->ball, &data->player1) || detectBallHitPad(&data->ball, &data->player1)) {
+    if (detectBallHitPad(&data->ball, &data->player1.pad) || detectBallHitPad(&data->ball, &data->player2.pad)) {
         data->ball.velocity.x *= -1.2;
-        data->ball.velocity.y *= -0.8;
+        data->ball.velocity.y *= 0.8;
     }
     
     updateBall(&data->ball);
@@ -72,9 +78,15 @@ static void draw(GameData* data) {
     Vector2 from = {.x = (GetScreenWidth() / 2.f), .y = 5};
     Vector2 to = {.x = (GetScreenWidth() / 2.f), .y = (GetScreenHeight() - 5.f)};
     DrawLineEx(from, to, 3, WHITE);
-    drawPad(&data->player1);
-    drawPad(&data->player2);
+    drawPad(&data->player1.pad);
+    drawPad(&data->player2.pad);
     // drawScore
     // drawScore
+    
+    drawBall(&data->ball);
     EndDrawing();
+}
+
+bool detectBallHitPad(Ball* ball, Pad* pad) {
+    return CheckCollisionCircleRec(ball->position, ball->radius, pad->rec);
 }
