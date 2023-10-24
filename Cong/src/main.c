@@ -24,27 +24,31 @@ int main(void) {
 }
 
 static void initGameData(GameData* data) {
-    data->player1 = (Pad) {
+    data->player1 = (Player) {
+        .pad = (Pad) {
         .position = (Vector2) {.x = 100, .y = 225},
         .size = (Vector2) {.x = 10, .y = 50},
         .speed = 5,
         .upBtn = KEY_W,
         .downBtn = KEY_S
+        },
+        .score = 0
     };
-    data->player2 = (Pad) {
+    data->player2 = (Player) {
+        .pad = (Pad) {
         .position = (Vector2) {.x = 700, .y = 225},
         .size = (Vector2) {.x = 10, .y = 50},
         .speed = 5,
         .upBtn = KEY_UP,
         .downBtn = KEY_DOWN
+        },
+        .score = 0
     };
     data->ball = (Ball) {
         .position = (Vector2) {.x = GetScreenWidth() / 2.f, .y = GetScreenHeight() / 2.f}, // ?
         .radius = 5,
         .velocity = (Vector2) {.x = -2, .y = 0}
     };
-    data->score1 = 0;
-    data->score2 = 0;
 }
 
 static void update(GameData* data) {
