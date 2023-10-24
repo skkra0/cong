@@ -12,3 +12,10 @@ void drawBall(Ball* ball) {
 bool detectBallHitY(Ball* ball) {
   return ball->position.y <= ball->radius || ball->position.y >= GetScreenHeight() - ball->radius;
 }
+
+bool detectBallHitPad(Ball* ball, Pad* pad) {
+  if (ball->position.x >= pad->position.x && ball->position.x <= pad->position.x + pad->size.x) {
+    return ball->position.y >= pad->position.y - (pad->size.y / 2) && ball->position.y <= pad->position.y + (pad->size.y / 2);
+  }
+  return false;
+}
