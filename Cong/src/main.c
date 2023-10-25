@@ -37,7 +37,7 @@ static void InitGameData(GameData* data) {
                 .width = 10,
                 .height = 50
             },
-            .speed = 550,
+            .speed = 9,
             .upBtn = KEY_W,
             .downBtn = KEY_S
         },
@@ -51,7 +51,7 @@ static void InitGameData(GameData* data) {
                 .width = 10,
                 .height = 50
             },
-            .speed = 550,
+            .speed = 9,
             .upBtn = KEY_UP,
             .downBtn = KEY_DOWN
         },
@@ -73,10 +73,25 @@ static void Update(GameData* data) {
     }
 
     if (DetectBallHitPad(&data->ball, &data->player1.pad) || DetectBallHitPad(&data->ball, &data->player2.pad)) {
-        data->ball.velocity.x *= -1.4;
+        data->ball.velocity.x *= -1.3;
         data->ball.velocity.y *= 1.2;
     }
-    
+
+    if (DetectBallMissed(&data->ball, false)) {
+        data->player2.score++;
+        for (int time = GetTime(); GetTime() < time + 1; ) { }
+
+        data->ball.position = SCREEN_CENTER;
+        data->ball.velocity = (Vector2) {.x = -100, .y = 80};
+    }
+
+    if (DetectBallMissed(&data->ball, true)) {
+        data->player1.score++;
+        for (int time = GetTime(); GetTime() < time + 1; ) {}
+
+        data->ball.position = SCREEN_CENTER;
+        data->ball.velocity = (Vector2) {.x = 100, .y = 80};
+    }
     UpdateBall(&data->ball);
 }
 
@@ -89,31 +104,12 @@ static void Draw(GameData* data) {
     DrawPad(&data->player1.pad);
     DrawPad(&data->player2.pad);
 
-    if (DetectBallMissed(&data->ball, false)) {
-        data->player2.score++;
-        for (int time = GetTime(); GetTime() < time + 1; ) {
-        
-        }
-
-        data->ball.position = SCREEN_CENTER;
-        data->ball.velocity = (Vector2) {.x = -100, .y = 80};
-    }
-
-    if (DetectBallMissed(&data->ball, true)) {
-        data->player1.score++;
-        for (int time = GetTime(); GetTime() < time + 1; ) {
-        
-        }
-
-        data->ball.position = SCREEN_CENTER;
-        data->ball.velocity = (Vector2) {.x = 100, .y = 80};
-    }
-    char* leftScore = TextFormat("%d", data->player1.score);
+    const char* leftScore = TextFormat("%d", data->player1.score);
     int leftScoreSize = MeasureText(leftScore, 40);
-    DrawText(leftScore, SCREEN_CENTER.x - 20 - leftScoreSize, 30, 40, RAYWHITE);
+    DrawText(leftScore, SCREEN_CENTER.x - 20 - leftScoreSize, 40, 60, RAYWHITE);
 
-    char* rightScore = TextFormat("%d", data->player2.score);
-    DrawText(rightScore, SCREEN_CENTER.x + 20, 30, 40, RAYWHITE);
+    const char* rightScore = TextFormat("%d", data->player2.score);
+    DrawText(rightScore, SCREEN_CENTER.x + 20, 40, 60, RAYWHITE);
 
     DrawBall(&data->ball);
     EndDrawing();
