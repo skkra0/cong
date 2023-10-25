@@ -108,8 +108,12 @@ static void Draw(GameData* data) {
         data->ball.position = SCREEN_CENTER;
         data->ball.velocity = (Vector2) {.x = 100, .y = 80};
     }
-    //DrawScore
-    //DrawScore
+    char* leftScore = TextFormat("%d", data->player1.score);
+    int leftScoreSize = MeasureText(leftScore, 40);
+    DrawText(leftScore, SCREEN_CENTER.x - 20 - leftScoreSize, 30, 40, RAYWHITE);
+
+    char* rightScore = TextFormat("%d", data->player2.score);
+    DrawText(rightScore, SCREEN_CENTER.x + 20, 30, 40, RAYWHITE);
 
     DrawBall(&data->ball);
     EndDrawing();
